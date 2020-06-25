@@ -393,7 +393,7 @@ class WaveletTransform(object):
         elif not self.unbias:
             return np.abs(self.wavelet_transform) ** 2
 
-    def reconstruction(self, scales=None):
+    def reconstruction(self, scales=None, idx=None):
         """Reconstruct the original signal from the wavelet
         transform. See S3.i.
 
@@ -425,13 +425,17 @@ class WaveletTransform(object):
 
         if scales is not None:
             self.scales = old_scales
+            
+        if idx is None:
+            idx=np.ones(s.shape,dtype=bool)
 
         # use the transpose to allow broadcasting
-        real_sum = np.sum(W_n.real.T / s ** .5, axis=-1).T
+        real_sum = np.sum(W_n.real.T[idx,:] / s[idx] ** .5, axis=-1).T
         x_n = real_sum * (dj * dt ** .5 / (C_d * Y_00))
 
         # add the mean back on (x_n is anomaly time series)
-        x_n += self.data.mean(axis=self.axis, keepdims=True)
+        if idx[-1]:
+            x_n += self.data.mean(axis=self.axis, keepdims=True)
 
         return x_n
 
