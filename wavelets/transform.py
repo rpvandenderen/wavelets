@@ -433,7 +433,7 @@ class WaveletTransform(object):
         real_sum = np.sum(W_n[idx,:].real.T / s[idx] ** .5, axis=-1).T
         x_n = real_sum * (dj * dt ** .5 / (C_d * Y_00))
 
-        # add the mean back on (x_n is anomaly time series)
+        # add the mean back on if the largest scale is part of the reproduction (x_n is anomaly time series)
         if idx[-1]:
             x_n += self.data.mean(axis=self.axis, keepdims=True)
 
