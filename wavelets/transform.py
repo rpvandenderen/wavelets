@@ -430,7 +430,7 @@ class WaveletTransform(object):
             idx=np.ones(s.shape,dtype=bool)
 
         # use the transpose to allow broadcasting
-        real_sum = np.sum(W_n.real.T[idx,:] / s[idx] ** .5, axis=-1).T
+        real_sum = np.sum(W_n[idx,:].real.T / s[idx] ** .5, axis=-1).T
         x_n = real_sum * (dj * dt ** .5 / (C_d * Y_00))
 
         # add the mean back on (x_n is anomaly time series)
